@@ -1,0 +1,77 @@
+"""Shared helpers for loading the Bank Marketing data and splitting it in time.
+
+Every notebook imports from this module, so the loading rules, the date
+reconstruction and the period boundaries are defined in one place only.
+"""
+
+from pathlib import Path
+
+import pandas as pd
+
+# Paths, relative to the root of the repository
+ROOT = Path(__file__).resolve().parents[1]
+RAW_FILE = ROOT / "data" / "raw" / "bank-additional-full.csv"
+PROCESSED_FILE = ROOT / "data" / "processed" / "bank_with_dates.csv"
+FIGURES_DIR = ROOT / "figures"
+RESULTS_DIR = ROOT / "results"
+
+MONTHS = ["jan", "feb", "mar", "apr", "may", "jun",
+          "jul", "aug", "sep", "oct", "nov", "dec"]
+FIRST_YEAR = 2008
+
+# Columns known only after the call: they must never be used as predictors.
+LEAKAGE_COLUMNS = ["duration"]
+
+# Macro-economic context columns (known before the call).
+MACRO_COLUMNS = ["emp.var.rate", "cons.price.idx", "cons.conf.idx",
+                 "euribor3m", "nr.employed"]
+
+# Time periods, as (first month, last month) in "YYYY-MM" format, inclusive.
+PERIODS = {
+    "train": ("2008-05", "2008-08"),
+    "validation": ("2008-10", "2008-12"),
+    "test_1": ("2009-03", "2009-05"),
+    "test_2": ("2009-06", "2010-11"),
+}
+
+
+def load_raw(path=RAW_FILE):
+    """Read the original UCI file (columns are separated by ';')."""
+    return pd.read_csv(path, sep=";")
+
+
+def add_dates(df, first_year=FIRST_YEAR):
+    """Add 'year', 'month_num' and 'year_month' columns.
+
+    The file has no year column, but its rows are ordered by date
+    (May 2008 to November 2010, see the UCI documentation). A new year
+    therefore starts every time the month number goes down from one row
+    to the next (for example from 'dec' to 'mar').
+    """
+    df = df.copy()
+    df["month_num"] = df["month"].map({m: i + 1 for i, m in enumerate(MONTHS)})
+    if df["month_num"].isna().any():
+        raise ValueError("Unknown month label in the data")
+    new_year = df["month_num"].diff() < 0
+    df["year"] = first_year + new_year.cumsum()
+    df["year_month"] = (df["year"].astype(str) + "-"
+                        + df["month_num"].astype(str).str.zfill(2))
+    return df
+
+
+def assign_period(df, periods=PERIODS):
+    """Add a 'period' column (train, validation, test_1, test_2).
+
+    Rows that fall outside every period keep the value 'unused'.
+    """
+    df = df.copy()
+    df["period"] = "unused"
+    for name, (start, end) in periods.items():
+        inside = (df["year_month"] >= start) & (df["year_month"] <= end)
+        df.loc[inside, "period"] = name
+    return df
+
+
+def load_processed(path=PROCESSED_FILE):
+    """Read the file written by notebook 01 (data with dates and periods)."""
+    return pd.read_csv(path)
