@@ -44,3 +44,25 @@ Then run the notebooks in order, each from top to bottom in a fresh kernel:
 | `02_explore_time.ipynb` | exploration of the change over time | Figure 1, Tables 1–2 |
 
 Running time: under one minute on the course workspace. No other resource is needed.
+
+## Declaration of tools
+
+This section is also reproduced in the appendix of the paper (Requirements 4.5(9), 5.2 and 6.6).
+
+**Claude (Anthropic)** — generative AI assistant, used through claude.ai and Claude Code.
+
+1. **Initial version of the repository.** Claude generated the first version of all six project files at the
+   student's request: `README.md`, `requirements.txt`, `.gitignore`, `src/data_utils.py`,
+   `notebooks/01_prepare_data.ipynb` and `notebooks/02_explore_time.ipynb`. This includes the data loading,
+   the reconstruction of the year of each call, the definition of the four time periods, the removal of
+   `duration`, Figure 1 and Tables 1–2.
+2. **Review and corrections (commits authored by "Claude" in the history).** Claude re-ran both notebooks from
+   a fresh clone, corrected inaccurate statements in their text (months with no calls, the description of
+   the validation period, the date the Euribor fell below 1%), changed Figure 1 so that its lines break at
+   months with no calls, added a check for duplicate rows and a table of the macro-economic variables in
+   the training period, and saved the notebooks with their outputs.
+3. **Interpretation text.** Claude drafted the interpretation of the client-mix table (last cell of
+   `notebooks/02_explore_time.ipynb`) and the commentary on Figure 1.
+
+The data set is not AI-generated: it is the original UCI file cited above. No code was taken from other
+repositories, forums or students. The student remains responsible for all submitted work (Requirement 5.4).
