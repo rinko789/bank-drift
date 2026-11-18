@@ -1,0 +1,13 @@
+window,feature_set,model,params,tuning_roc_auc
+A_end2008,with_macro,logistic_regression,"{""C"": 0.01}",0.4863950978689623
+A_end2008,with_macro,random_forest,"{""max_depth"": 12, ""min_samples_leaf"": 10}",0.4247457143565953
+A_end2008,without_macro,logistic_regression,"{""C"": 0.01}",0.4419292217618894
+A_end2008,without_macro,random_forest,"{""max_depth"": null, ""min_samples_leaf"": 10}",0.4134883028604034
+B_may2009,with_macro,logistic_regression,"{""C"": 0.1}",0.6318848669023353
+B_may2009,with_macro,random_forest,"{""max_depth"": 12, ""min_samples_leaf"": 10}",0.6075304085415615
+B_may2009,without_macro,logistic_regression,"{""C"": 0.1}",0.5833174596611844
+B_may2009,without_macro,random_forest,"{""max_depth"": 6, ""min_samples_leaf"": 10}",0.6114595730794333
+C_end2009,with_macro,logistic_regression,"{""C"": 1}",0.6058889353067558
+C_end2009,with_macro,random_forest,"{""max_depth"": null, ""min_samples_leaf"": 10}",0.5978082477918358
+C_end2009,without_macro,logistic_regression,"{""C"": 0.1}",0.6084285728495266
+C_end2009,without_macro,random_forest,"{""max_depth"": 6, ""min_samples_leaf"": 50}",0.5991876044402006

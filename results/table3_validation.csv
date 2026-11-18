@@ -1,5 +1,0 @@
-feature_set,model,params,valid_roc_auc,valid_pr_auc
-with_macro,logistic_regression,"{""C"": 0.001}",0.6121480314569947,0.21977472834054074
-with_macro,random_forest,"{""max_depth"": 12, ""min_samples_leaf"": 1}",0.46137897243791715,0.05818673027575508
-without_macro,logistic_regression,"{""C"": 0.001}",0.4462154853754744,0.06285985491537588
-without_macro,random_forest,"{""max_depth"": null, ""min_samples_leaf"": 1}",0.4491800838522415,0.061181182751618816
