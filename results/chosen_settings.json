@@ -1,0 +1,16 @@
+{
+  "logistic_regression__with_macro": {
+    "C": 0.001
+  },
+  "random_forest__with_macro": {
+    "max_depth": 12,
+    "min_samples_leaf": 1
+  },
+  "logistic_regression__without_macro": {
+    "C": 0.001
+  },
+  "random_forest__without_macro": {
+    "max_depth": null,
+    "min_samples_leaf": 1
+  }
+}
