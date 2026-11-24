@@ -10,6 +10,11 @@ term-deposit subscriptions on the 2009–2010 calls, after the Euribor rate coll
 And does a flexible model (random forest) lose more performance than a simple one
 (logistic regression)?
 
+**Design.** The calls are cut into four time blocks (2008, Mar–May 2009, Jun–Dec 2009, Mar–Nov 2010).
+Models are trained at three dates (end of 2008, end of May 2009, end of 2009), each time on every call
+known at that date, and tested on every later block. This shows how long a model trained before the
+crisis stays useful, and how much updating it helps.
+
 ## Data
 
 `data/raw/bank-additional-full.csv`: Bank Marketing data set (41,188 calls, May 2008 to
@@ -23,9 +28,10 @@ Bank Telemarketing. *Decision Support Systems*, 62, 22–31.
 
 ```
 data/raw/          original file, unchanged
-data/processed/    data with reconstructed dates and periods (made by notebook 01)
+data/processed/    data with reconstructed dates and periods (notebook 01), model predictions (notebook 03)
 notebooks/         one notebook per stage, run in numeric order
 src/data_utils.py  shared code: loading, date reconstruction, period boundaries
+src/modelling.py   shared code: time blocks, training windows, features, model definitions
 figures/           figures used in the paper (made by the notebooks)
 results/           tables used in the paper (made by the notebooks)
 ```
@@ -42,8 +48,9 @@ Then run the notebooks in order, each from top to bottom in a fresh kernel:
 |---|---|---|
 | `01_prepare_data.ipynb` | load, check, rebuild dates, assign periods, drop `duration` | `data/processed/bank_with_dates.csv` |
 | `02_explore_time.ipynb` | exploration of the change over time | Figure 1, Tables 1–2 |
+| `03_models.ipynb` | fit and tune logistic regression and random forest at three dates | Table 3, `data/processed/predictions.csv` |
 
-Running time: under one minute on the course workspace. No other resource is needed.
+Running time: about three minutes in total, almost all of it in notebook 03 (measured on a 4-core machine). No other resource is needed.
 
 ## Declaration of tools
 
@@ -61,7 +68,13 @@ This section is also reproduced in the appendix of the paper (Requirements 4.5(9
    the validation period, the date the Euribor fell below 1%), changed Figure 1 so that its lines break at
    months with no calls, added a check for duplicate rows and a table of the macro-economic variables in
    the training period, and saved the notebooks with their outputs.
-3. **Interpretation text.** Claude drafted the interpretation of the client-mix table (last cell of
+3. **Modelling (notebook 03 and `src/modelling.py`).** After the first version of notebook 03 showed that
+   a model trained on 2008 performs at chance level even before the crisis, Claude proposed the
+   expanding-window design (training at three dates), which the student chose. Claude wrote
+   `src/modelling.py` and `notebooks/03_models.ipynb`; the choice of columns (leaving out the earlier-campaign
+   columns at first, then `pdays` and `month`; keeping the economic columns with a version without them)
+   was discussed with and decided by the student.
+4. **Interpretation text.** Claude drafted the interpretation of the client-mix table (last cell of
    `notebooks/02_explore_time.ipynb`) and the commentary on Figure 1.
 
 The data set is not AI-generated: it is the original UCI file cited above. No code was taken from other
